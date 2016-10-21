@@ -24,7 +24,7 @@ bot.on('inline_query', (msg) => {
     res_text = formatChemcalcResult(ans, true);
   } catch (e) {
     ans = {mv: ''};
-    res_text = 'The symbol must start with uppercase';
+    res_text = 'Molecular formula not found';
   }
 
   bot.answerInlineQuery(msg.id, [{
@@ -55,7 +55,7 @@ bot.onText(/(^[^\/@]+)/, (msg, match) => {
       bot.sendPhoto(fromId, fromId + '.png');
     });
   } catch (error) {
-    console.error('The symbol must start with uppercase');
+    bot.sendMessage(fromId, 'Molecular formula not found');
   }
 });
 
