@@ -12,7 +12,7 @@ let bot = new TelegramBot(token, {polling: true});
 
 // A very polite bot
 bot.getMe().then((me) => {
-    console.log('Hi my name is %s!', me.username);
+  console.log('Hi my name is %s!', me.username);
 });
 
 // Inline rendering
@@ -21,10 +21,15 @@ bot.on('inline_query', (msg) => {
   let ans, res_text;
   try {
     ans = analyseMF(msg.query, {isotopomers: 'arrayXYXY'});
-    res_text = formatChemcalcResult(ans, true);
-  } catch (e) {
-    ans = {mv: ''};
-    res_text = 'Molecular formula not found';
+    res_text = formatChemcalcResult(ans, true, false);
+  } catch (error) {
+    if (error.b === 'Isotopic distribution: empty table') {
+      ans = analyseMF(msg.query);
+      res_text = formatChemcalcResult(ans, true, true);
+    } else {
+      ans = {mv: 'not found'};
+      res_text = error.b;
+    }
   }
 
   bot.answerInlineQuery(msg.id, [{
@@ -55,15 +60,21 @@ bot.onText(/(^[^\/@]+)/, (msg, match) => {
       bot.sendPhoto(fromId, fromId + '.png');
     });
   } catch (error) {
-    bot.sendMessage(fromId, 'Molecular formula not found');
+    if (error.b === 'Isotopic distribution: empty table') {
+      bot.sendMessage(fromId,
+          formatChemcalcResult(analyseMF(match[1]), false, true),
+          {parse_mode: 'Markdown'}
+      );
+    } else {
+      bot.sendMessage(fromId, error.b);
+    }
   }
 });
 
 /**
  * Make the MF analysis
- *
  * @param  {string} formula chemical formula
- * @return {object}         formated result, x values and y values
+ * @return {object} formated result, x values and y values
  */
 function chem_calc (formula) {
   let result = analyseMF(formula, {isotopomers: 'arrayXYXY'});
@@ -72,7 +83,7 @@ function chem_calc (formula) {
   let chartXTo = Math.ceil(xy[xy.length - 1][0]) + 2;
 
   return {
-    data: formatChemcalcResult(result, false),
+    data: formatChemcalcResult(result, false, false),
     xy: xy,
     chartXFrom: chartXFrom,
     chartXTo: chartXTo
@@ -81,10 +92,9 @@ function chem_calc (formula) {
 
 /**
  * Generates an Isotopic distribution image
- *
- * @param  {object} result     resulting object of the che_calc function
- * @param fromId
- * @param  {function} callback what to do when the img is generated
+ * @param {object} result - resulting object of the che_calc function
+ * @param {number} fromId - id of the user that requested the formula
+ * @param {function} callback what to do when the img is generated
  */
 function img_generation (result, fromId, callback) {
   let out = fs.createWriteStream(fromId + '.png');
