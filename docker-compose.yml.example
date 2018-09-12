@@ -1,0 +1,7 @@
+version: '2'
+services:
+  chemcalc-bot:
+    build: src/
+    restart: always
+    environment:
+      TELEGRAM_TOKEN: <your token here>
