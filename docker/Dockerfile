@@ -6,11 +6,10 @@ RUN apt-get install -y gnuplot
 # Create app directory
 WORKDIR /chemcalc-bot
 
-COPY src /chemcalc-bot/src
-
 # Install app dependencies
 COPY package.json /chemcalc-bot/
 RUN npm install --production
 
+COPY src /chemcalc-bot/src
 
 CMD [ "npm", "start" ]
