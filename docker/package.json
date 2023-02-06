@@ -6,6 +6,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "eslint": "eslint src __tests__",
+    "eslint-fix": "npm run eslint -- --fix",
+    "prettier": "prettier --check src",
+    "prettier-write": "prettier --write src",
     "start": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -14,25 +18,16 @@
   "license": "ISC",
   "dependencies": {
     "@types/node": "^18.11.18",
-    "chemcalc": "^3.4.1",
     "debug": "^4.3.4",
     "gnuplot": "^0.3.1",
+    "isotopic-distribution": "^2.0.1",
     "mf-parser": "^2.1.0",
     "moment": "^2.29.4",
-    "node-telegram-bot-api": "^0.61.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-plot": "^1.4.2"
+    "node-telegram-bot-api": "^0.61.0"
   },
   "devDependencies": {
     "eslint": "^8.33.0",
     "eslint-config-cheminfo": "^8.1.3",
     "prettier": "^2.8.3"
-  },
-  "overrides": {
-    "d3-scale": "^3.3.0",
-    "d3-scale-chromatic": "^2.0.0",
-    "d3-array": "^2.12.1",
-    "d3-shape": "^2.1.0"
   }
 }

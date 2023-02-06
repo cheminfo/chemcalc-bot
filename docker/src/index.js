@@ -7,7 +7,7 @@ import loadCommands from './loadCommands.js';
 
 const token = process.env.TELEGRAM_TOKEN;
 
-const debug = debugLib('ChemCalc bot');
+const debug = debugLib('bot:index');
 
 let bot = new TelegramBot(token, { polling: true });
 

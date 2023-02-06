@@ -1,13 +1,10 @@
-import chemcalcPkg from 'chemcalc';
 import debugLib from 'debug';
 
-import { formatChemcalcResult } from './formatChemcalcResult.js';
-import { generateIsotopicDistributionImage } from './generateIsotopicDistributionImage.js';
-import { processMF } from './processMF.js';
+import { formatResult } from './utils/formatResult.js';
+import { generateIsotopicDistributionImage } from './utils/generateIsotopicDistributionImage.js';
+import { getMFInfo } from './utils/getMFInfo.js';
 
-const { analyseMF } = chemcalcPkg;
-
-const debug = debugLib('defaultText');
+const debug = debugLib('bot:defaultText');
 
 export default function defaultText(bot) {
   // Not inline rendering
@@ -17,26 +14,21 @@ export default function defaultText(bot) {
     debug(match[1]);
     // formula calculation
     let fromId = msg.from.id;
-    let result;
+    let mfInfo;
     try {
-      result = processMF(match[1]);
-      bot.sendMessage(fromId, result.data, { parse_mode: 'Markdown' });
-
-      // image rendering
-      generateIsotopicDistributionImage(result, fromId, (err) => {
-        if (err) console.error(err);
-        bot.sendPhoto(fromId, `${fromId}.png`);
+      mfInfo = getMFInfo(match[1]);
+      bot.sendMessage(fromId, formatResult(mfInfo, true), {
+        parse_mode: 'Markdown',
       });
-    } catch (error) {
-      if (error.b === 'Isotopic distribution: empty table') {
-        bot.sendMessage(
-          fromId,
-          formatChemcalcResult(analyseMF(match[1]), false, true),
-          { parse_mode: 'Markdown' },
-        );
-      } else {
-        bot.sendMessage(fromId, error.b);
+      if (mfInfo.isotopicDistribution) {
+        // image rendering
+        generateIsotopicDistributionImage(mfInfo, fromId, (err) => {
+          if (err) console.error(err);
+          bot.sendPhoto(fromId, `${fromId}.png`);
+        });
       }
+    } catch (error) {
+      bot.sendMessage(fromId, error);
     }
   });
 }

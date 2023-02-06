@@ -1,33 +1,30 @@
-import chemcalcPkg from 'chemcalc';
+import debugLib from 'debug';
 
-import { formatChemcalcResult } from './formatChemcalcResult.js';
+import { formatResult } from './utils/formatResult.js';
+import { getMFInfo } from './utils/getMFInfo.js';
 
-const { analyseMF } = chemcalcPkg;
+const debug = debugLib('bot:inLineQuery');
 
 export default function inlineQuery(bot) {
   // Inline rendering
   // @chemcalc_bot C10H12O3
   bot.on('inline_query', (msg) => {
     debug('inline_query');
-    let ans, textResult;
+    let mfInfo, textResult;
     try {
-      ans = analyseMF(msg.query, { isotopomers: 'arrayXYXY' });
-      textResult = formatChemcalcResult(ans, true, false);
+      mfInfo = getMFInfo(msg.query);
+      textResult = formatResult(mfInfo, true);
     } catch (error) {
-      if (error.b === 'Isotopic distribution: empty table') {
-        ans = analyseMF(msg.query);
-        textResult = formatChemcalcResult(ans, true, true);
-      } else {
-        ans = { mv: 'not found' };
-        textResult = error.b;
-      }
+      textResult = error.toString();
     }
 
     bot.answerInlineQuery(msg.id, [
       {
         type: 'article',
         id: '1',
-        title: `${msg.query} - mw: ${ans.mw}`,
+        title:
+          (mfInfo?.mf || msg.query) +
+          (mfInfo ? ` - mw: ${mfInfo.mass.toFixed(2)}` : ' - error'),
         input_message_content: {
           message_text: msg.query ? textResult : 'Molecular formula not given',
           parse_mode: 'Markdown',

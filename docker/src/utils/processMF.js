@@ -1,6 +1,29 @@
-const url = 'http://www.chemcalc.org/analyse_content?mf=';
+import chemcalcPkg from 'chemcalc';
 
-export function formatChemcalcResult(chemcalcResult, link, emptyTable) {
+const { analyseMF } = chemcalcPkg;
+
+const url = 'https://www.chemcalc.org/analyse_content?mf=';
+
+/**
+ * Make the MF analysis
+ * @param  {string} formula chemical formula
+ * @return {object} formated result, x values and y values
+ */
+export function processMF(formula) {
+  let result = analyseMF(formula, { isotopomers: 'arrayXYXY' });
+  let xy = result.arrayXYXY;
+  let chartXFrom = Math.floor(xy[0][0]) - 2;
+  let chartXTo = Math.ceil(xy[xy.length - 1][0]) + 2;
+
+  return {
+    data: formatResult(result, false, false),
+    xy,
+    chartXFrom,
+    chartXTo,
+  };
+}
+
+function formatResult(chemcalcResult, link, emptyTable) {
   let result = [];
   result.push(`*MF:* ${chemcalcResult.mf}`);
   result.push(`*MW:* ${chemcalcResult.mw}`);
