@@ -9,7 +9,7 @@ const debug = debugLib('bot:defaultText');
 export default function defaultText(bot) {
   // Not inline rendering
   // C10H12O3
-  bot.onText(/(^[^\/@]+)/, (msg, match) => {
+  bot.onText(/(^[^\/@]+)/, async (msg, match) => {
     debug(`onText from: ${msg.from.id}`);
     debug(match[1]);
     // formula calculation
@@ -22,10 +22,8 @@ export default function defaultText(bot) {
       });
       if (mfInfo.isotopicDistribution) {
         // image rendering
-        generateIsotopicDistributionImage(mfInfo, fromId, (err) => {
-          if (err) console.error(err);
-          bot.sendPhoto(fromId, `${fromId}.png`);
-        });
+        const buffer = await generateIsotopicDistributionImage(mfInfo);
+        bot.sendPhoto(fromId, buffer);
       }
     } catch (error) {
       bot.sendMessage(fromId, error);

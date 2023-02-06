@@ -1,7 +1,7 @@
 FROM node:19
 
 RUN apt-get update
-RUN apt-get install -y gnuplot
+# RUN apt-get install -y libpangocairo-1.0-0
 
 # Create app directory
 WORKDIR /chemcalc-bot
