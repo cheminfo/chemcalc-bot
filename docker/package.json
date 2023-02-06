@@ -18,8 +18,8 @@
   "license": "ISC",
   "dependencies": {
     "@types/node": "^18.11.18",
+    "chartjs-node-canvas": "^4.1.6",
     "debug": "^4.3.4",
-    "gnuplot": "^0.3.1",
     "isotopic-distribution": "^2.0.1",
     "mf-parser": "^2.1.0",
     "moment": "^2.29.4",
