@@ -6,12 +6,10 @@ const backgroundColour = 'white'; // Uses https://www.w3schools.com/tags/canvas_
 
 /**
  * Generates an Isotopic distribution image
- * @param {object} result - resulting object of the che_calc function
- * @param {number} fromId - id of the user that requested the formula
- * @param {function} callback what to do when the img is generated
+ * @param {object} mfInfo - resulting object of mass-tools
  */
-export function generateIsotopicDistributionImage(result) {
-  const peaks = result.isotopicDistribution;
+export function generateIsotopicDistributionImage(mfInfo) {
+  const peaks = mfInfo.isotopicDistribution;
   const xs = peaks.map((point) => point.x);
   const xMin = Math.floor(Math.min(...xs) - 1);
   const xMax = Math.ceil(Math.max(...xs) + 1);
@@ -65,7 +63,7 @@ export function generateIsotopicDistributionImage(result) {
         },
         title: {
           display: true,
-          text: 'Isotopic distribution',
+          text: `Isotopic distribution of ${mfInfo.mf}`,
         },
       },
     },
