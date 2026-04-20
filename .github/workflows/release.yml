@@ -8,3 +8,5 @@ jobs:
   release:
     # Documentation: https://github.com/zakodium/workflows#release
     uses: zakodium/workflows/.github/workflows/release.yml@release-v1
+    secrets:
+      github-token: ${{ secrets.BOT_TOKEN }}
