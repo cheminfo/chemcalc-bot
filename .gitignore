@@ -1,3 +1,6 @@
-node_modules
+.claude
+.env
 .idea/
+compose.yaml
 docker-compose.yml
+node_modules

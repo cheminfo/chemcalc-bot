@@ -1,0 +1,33 @@
+{
+  "name": "chemcalc-bot",
+  "version": "1.0.0",
+  "description": "Telegram bot to answer ChemCalc questions and display isotopic distributions.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "node --env-file-if-exists=.env --watch src/index.js",
+    "eslint": "eslint src",
+    "eslint-fix": "npm run eslint -- --fix",
+    "prettier": "prettier --check src",
+    "prettier-write": "prettier --write src",
+    "start": "node --env-file-if-exists=.env src/index.js",
+    "test": "npm run eslint && npm run prettier"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "chartjs-node-canvas": "^5.0.0",
+    "debug": "^4.4.3",
+    "isotopic-distribution": "^3.7.0",
+    "mf-parser": "^3.9.0",
+    "moment": "^2.30.1",
+    "node-telegram-bot-api": "^0.67.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.12.2",
+    "eslint": "^9.39.4",
+    "eslint-config-cheminfo": "^18.0.0",
+    "prettier": "^3.8.3"
+  }
+}

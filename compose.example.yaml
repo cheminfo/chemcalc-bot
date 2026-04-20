@@ -1,0 +1,21 @@
+services:
+  chemcalc-bot:
+    # Use the released image by default. To build locally instead, run:
+    #   docker compose up -d --build
+    image: ghcr.io/cheminfo/chemcalc-bot:latest
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    init: true
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    mem_limit: 512m
+    cpus: 1
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'

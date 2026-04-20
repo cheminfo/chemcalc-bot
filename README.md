@@ -2,23 +2,35 @@
 
 > [Bot's link](http://telegram.me/chemcalc_bot)
 
-Telegram bot to answer ChemCalc question and display isotopic distribution.
+Telegram bot that answers ChemCalc questions and renders isotopic distributions.
 
-## Install
-
-```bash
-$ npm install
-```
-
-## Production
-
-In order to be able to run this the `TELEGRAM_TOKEN` should be set to the token provided for Telegram
+## Deployment with Docker
 
 ```bash
-$ docker pull cheminfo/chemcalc-bot
-$ docker run -it --env TELEGRAM_TOKEN=<your token here> cheminfo/chemcalc-bot
+cp .env.example .env
+# edit .env and set TELEGRAM_TOKEN to the value given by @BotFather
+cp compose.example.yaml compose.yaml
+docker compose pull && docker compose up -d
 ```
 
-## Related documents
-  - [Telegram Bot API](https://core.telegram.org/bots/api)
-  - [Telegram Bot API for NodeJS](https://github.com/yagop/node-telegram-bot-api)
+To build the image from the current checkout instead of pulling the published one:
+
+```bash
+docker compose up -d --build
+```
+
+## Local development
+
+```bash
+npm install
+cp .env.example .env
+# edit .env and set TELEGRAM_TOKEN
+npm run dev
+```
+
+`TELEGRAM_TOKEN` is read from the process environment. `npm run dev` and `npm start` use Node's `--env-file-if-exists=.env` flag, so the local `.env` file is loaded automatically. In Docker, the same values are injected by the `env_file` directive in compose — no `.env` file is present inside the container, which is why `-if-exists` is used.
+
+## Related
+
+- [Telegram Bot API](https://core.telegram.org/bots/api)
+- [node-telegram-bot-api](https://github.com/yagop/node-telegram-bot-api)

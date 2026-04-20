@@ -25,10 +25,12 @@ export default function inlineQuery(bot) {
         title:
           (mfInfo?.mf || msg.query) +
           (mfInfo ? ` - mw: ${mfInfo.mass.toFixed(2)}` : ' - error'),
+        /* eslint-disable camelcase -- Telegram Bot API uses snake_case */
         input_message_content: {
           message_text: msg.query ? textResult : 'Molecular formula not given',
           parse_mode: 'Markdown',
         },
+        /* eslint-enable camelcase */
       },
     ]);
   });

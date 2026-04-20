@@ -1,17 +1,21 @@
 import { IsotopicDistribution } from 'isotopic-distribution';
-import { ensureCase, MF } from 'mf-parser';
+import { MF, ensureCase } from 'mf-parser';
 
 export function getMFInfo(mfString) {
   const mf = new MF(ensureCase(mfString));
-  let mfInfo = mf.getInfo();
+  const mfInfo = mf.getInfo();
   try {
     mfInfo.ea = mf.getEA();
-  } catch (e) {}
+  } catch {
+    // elemental analysis is optional
+  }
   try {
     mfInfo.isotopicDistribution = new IsotopicDistribution(mfInfo.mf).getPeaks({
       maxValue: 100,
     });
-  } catch (e) {}
+  } catch {
+    // isotopic distribution is optional
+  }
 
   return mfInfo;
 }

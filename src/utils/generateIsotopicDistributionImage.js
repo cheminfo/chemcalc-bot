@@ -77,17 +77,17 @@ export function generateIsotopicDistributionImage(mfInfo) {
 const VerticalLinePlugin = {
   afterDatasetDraw: (chart, params) => {
     // Only draw after animation has finished and is the desired dataset
-    if (params.meta.type == 'scatter') {
+    if (params.meta.type === 'scatter') {
       const ctx = chart.ctx;
       ctx.save();
-      params.meta.data.forEach((point) => {
+      for (const point of params.meta.data) {
         ctx.strokeStyle = 'red';
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.moveTo(point.x, point.y);
         ctx.lineTo(point.x, chart.chartArea.bottom);
         ctx.stroke();
-      });
+      }
       ctx.restore();
     }
   },
